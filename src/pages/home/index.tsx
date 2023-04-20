@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import Home from "./component";
+import { HomePage } from "./component";
 
 const index = (props: any) => {
   const data = {
@@ -13,7 +13,7 @@ const index = (props: any) => {
     console.log({ onClickData });
   };
 
-  return <Home data={data} onClickData={onClickData} />;
+  return <HomePage data={data} onClickData={onClickData} />;
 };
 
 export const getStaticProps: GetStaticProps = async () => {

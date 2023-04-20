@@ -1,12 +1,127 @@
-import { Layout } from "@/components/layouts";
 import { NextPage } from "next";
+import { THomePage } from "./types";
+import { Layout } from "@/components/layouts";
+import { Grid } from "@nextui-org/react";
+import { Column, ItemColumn, Loading, NewEntry } from "@/components/ui/";
+import { useForm, useGetListEntries, useGetStore } from "@/hooks";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { newEntry } from "@/redux";
+import { getUid } from "@/utils";
 
-const Home: NextPage<any> = (props) => {
+export const HomePage: NextPage<THomePage> = () => {
+  const dispatch = useDispatch();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { listEntriesFinished, listEntriesInProgress, listEntriesPending } =
+    useGetListEntries();
+
+  const [showModalNewEntry, setShowModalNewEntry] = useState(false);
+  const [{ color, helperColor, helperText }, setTextAreaStyle] = useState({
+    helperColor: "default",
+    color: "default",
+    helperText: "",
+  });
+
+  const onShowNewEntry = () => {
+    setShowModalNewEntry((state) => !state);
+  };
+  const onCloseNewEntry = () => {
+    setShowModalNewEntry(false);
+    onClear();
+  };
+
+  const { onChange, onClear, dataForm } = useForm({
+    description: "",
+  });
+
+  const onSave = () => {
+    dispatch(
+      newEntry({
+        _id: getUid(),
+        createdAt: Date.now() - 30000,
+        status: "pending",
+        description: dataForm.description,
+      })
+    );
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    if (dataForm.description.length < 1) {
+      setTextAreaStyle({
+        color: "error",
+        helperColor: "error",
+        helperText: "Digite por lo menos un carácter",
+      });
+    } else {
+      setTextAreaStyle({
+        color: "default",
+        helperColor: "default",
+        helperText: "",
+      });
+    }
+  }, [dataForm.description]);
+
   return (
-    <Layout title="Account">
-      <h1 className="text-center text-7xl">Hola mundo</h1>
-    </Layout>
+    <>
+      <Loading isLoading={isLoading} />
+
+      <Layout title="home">
+        <Grid className="flex gap-12">
+          <Column title="Pendientes" iconAdd onShowNewEntry={onShowNewEntry}>
+            {listEntriesPending?.map((itemPending) => (
+              <ItemColumn
+                key={itemPending._id}
+                note={itemPending.description}
+                date={"hace 30 minutos"}
+              />
+            ))}
+          </Column>
+
+          <Column title="En progreso">
+            {listEntriesInProgress?.map((itemInProgress) => (
+              <ItemColumn
+                key={itemInProgress._id}
+                note={itemInProgress.description}
+                date={"hace 30 minutos"}
+              />
+            ))}
+          </Column>
+
+          <Column title="Completadas">
+            {listEntriesFinished?.map((itemFinished) => (
+              <ItemColumn
+                key={itemFinished._id}
+                note={itemFinished.description}
+                date={"hace 30 minutos"}
+              />
+            ))}
+          </Column>
+        </Grid>
+
+        <NewEntry
+          onChangeTextarea={(e: any) => {
+            onChange(e);
+          }}
+          description={dataForm.description}
+          onCloseModal={onCloseNewEntry}
+          showModal={showModalNewEntry}
+          color={color}
+          helperColor={helperColor}
+          helperText={helperText}
+          onSave={onSave}
+        />
+      </Layout>
+    </>
   );
 };
 
-export default Home;
+{
+  /*  */
+}

@@ -39,7 +39,7 @@ export const Layout: NextPage<LayoutProps> = ({ title, children }) => {
       {/* Navbar */}
       <Navbar />
 
-      <Container lg>{children}</Container>
+      <Container>{children}</Container>
     </Grid>
   );
 };

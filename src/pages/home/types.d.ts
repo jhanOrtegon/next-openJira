@@ -1,13 +1,8 @@
-type TAccountPage = {
-    
+export type THomePage = {
     data: {
         name: string,
         lastName: string,
         age: number
     },
-    
-    account: string,
-
     onClickData: () => void,
-
 }

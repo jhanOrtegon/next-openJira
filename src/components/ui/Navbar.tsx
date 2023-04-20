@@ -23,8 +23,13 @@ export const Navbar = () => {
   ];
 
   return (
-    <NavbarNextUi isBordered variant="static" maxWidth={"fluid"}>
-      <div className="flex gap-2">
+    <NavbarNextUi
+      isBordered
+      variant="static"
+      maxWidth={"fluid"}
+      className="mb-8"
+    >
+      <div className="flex gap-3">
         <NavbarNextUi.Toggle />
         <NavbarNextUi.Brand>
           <Text className="text-2xl">OpenJira</Text>
