@@ -78,6 +78,7 @@ export const HomePage: NextPage<THomePage> = () => {
             {listEntriesPending?.map((itemPending) => (
               <ItemColumn
                 key={itemPending._id}
+                id={itemPending._id}
                 note={itemPending.description}
                 date={"hace 30 minutos"}
               />
@@ -88,6 +89,7 @@ export const HomePage: NextPage<THomePage> = () => {
             {listEntriesInProgress?.map((itemInProgress) => (
               <ItemColumn
                 key={itemInProgress._id}
+                id={itemInProgress._id}
                 note={itemInProgress.description}
                 date={"hace 30 minutos"}
               />
@@ -97,6 +99,7 @@ export const HomePage: NextPage<THomePage> = () => {
           <Column title="Completadas">
             {listEntriesFinished?.map((itemFinished) => (
               <ItemColumn
+                id={itemFinished._id}
                 key={itemFinished._id}
                 note={itemFinished.description}
                 date={"hace 30 minutos"}

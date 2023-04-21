@@ -9,6 +9,7 @@ export type TItemColumn = {
     note:string,
     children?: React.ReactNode, 
     date: string
+    id: string
 }
 
 export type propsNewEntry  = {

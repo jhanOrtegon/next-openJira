@@ -1,5 +1,4 @@
-import { TEntry } from '@/types'
-import { getUid } from '@/utils'
+import { EntryStatus, TEntry } from '@/types'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -11,9 +10,15 @@ export const entriesSlice = createSlice({
   reducers: {
     
     newEntry: (state, {payload}: PayloadAction<TEntry>) => {
-      state.push(payload)
+      return state = [...state, payload]
+    },
+    
+    changeStatusEntry: (state, {payload}: PayloadAction<{id:string, status:EntryStatus}>) => {
+      const entry:TEntry = state.find(el=> el._id === payload.id)!
+      const newListEntry = state.filter(el=>el._id !== payload.id)
+      return state = [...newListEntry, {...entry, status: payload.status}]
     },
   },
 })
 
-export const { newEntry} = entriesSlice.actions
+export const { newEntry, changeStatusEntry } = entriesSlice.actions
