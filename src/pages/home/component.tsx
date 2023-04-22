@@ -4,10 +4,11 @@ import { Layout } from "@/components/layouts";
 import { Grid } from "@nextui-org/react";
 import { Column, ItemColumn, Loading, NewEntry } from "@/components/ui/";
 import { useForm, useGetListEntries, useGetStore } from "@/hooks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { newEntry } from "@/redux";
 import { getUid } from "@/utils";
+import { getEnv } from "@/utils/getEnv";
 
 export const HomePage: NextPage<THomePage> = () => {
   const dispatch = useDispatch();

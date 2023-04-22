@@ -4,13 +4,10 @@ import { TItemColumn } from "./types";
 
 export const ItemColumn: NextPage<TItemColumn> = ({ note, date, id }) => {
   const onDragStart = (event: React.DragEvent) => {
-    console.log({ event });
     event.dataTransfer?.setData("text", id);
   };
 
-  const onDragEnd = (event: React.DragEvent) => {
-    console.log({ event });
-  };
+  const onDragEnd = (event: React.DragEvent) => {};
 
   return (
     <Card
