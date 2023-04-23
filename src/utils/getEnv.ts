@@ -1,7 +1,7 @@
 export const getEnv = () => {
-    const CLIENT_KEY = process.env.NEXT_PUBLIC_CLIENT_KEY
+    const MONGO_URL = process.env.MONGO_URL
 
     return{
-        CLIENT_KEY
+        MONGO_URL
     }
 }
