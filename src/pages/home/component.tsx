@@ -6,9 +6,10 @@ import { Column, ItemColumn, Loading, NewEntry } from "@/components/ui/";
 import { useForm, useGetListEntries, useGetStore } from "@/hooks";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
-import { newEntry } from "@/redux";
-import { getUid } from "@/utils";
-import { getEnv } from "@/utils/getEnv";
+import { loadEntries, newEntry } from "@/redux";
+import { getUid, newNotify } from "@/utils";
+import { entriesService } from "@/services";
+import { TEntry } from "@/types";
 
 export const HomePage: NextPage<THomePage> = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ export const HomePage: NextPage<THomePage> = () => {
   const onShowNewEntry = () => {
     setShowModalNewEntry((state) => !state);
   };
+
   const onCloseNewEntry = () => {
     setShowModalNewEntry(false);
     onClear();
@@ -37,20 +39,29 @@ export const HomePage: NextPage<THomePage> = () => {
     description: "",
   });
 
-  const onSave = () => {
-    dispatch(
-      newEntry({
-        _id: getUid(),
-        createdAt: Date.now() - 30000,
-        status: "pending",
+  const onSave = async () => {
+    try {
+      setIsLoading(true);
+      const { data } = await entriesService.post("/entries", {
         description: dataForm.description,
-      })
-    );
-    setIsLoading(true);
-
-    setTimeout(() => {
+      });
+      newNotify("Nueva nota agregada");
       setIsLoading(false);
-    }, 2000);
+      dispatch(newEntry({ ...data }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getEntries = async () => {
+    console.log("entro");
+    try {
+      const { data } = await entriesService.get<TEntry[]>("/entries");
+      console.log(data);
+      dispatch(loadEntries(data));
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -68,6 +79,11 @@ export const HomePage: NextPage<THomePage> = () => {
       });
     }
   }, [dataForm.description]);
+
+  useEffect(() => {
+    getEntries();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -110,16 +126,16 @@ export const HomePage: NextPage<THomePage> = () => {
         </Grid>
 
         <NewEntry
+          color={color}
+          description={dataForm.description}
+          helperColor={helperColor}
+          helperText={helperText}
+          onCloseModal={onCloseNewEntry}
+          onSave={onSave}
+          showModal={showModalNewEntry}
           onChangeTextarea={(e: any) => {
             onChange(e);
           }}
-          description={dataForm.description}
-          onCloseModal={onCloseNewEntry}
-          showModal={showModalNewEntry}
-          color={color}
-          helperColor={helperColor}
-          helperText={helperText}
-          onSave={onSave}
         />
       </Layout>
     </>

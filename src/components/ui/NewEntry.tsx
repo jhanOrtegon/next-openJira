@@ -77,7 +77,7 @@ export const NewEntry: NextPage<propsNewEntry> = ({
             color={"success"}
             onClick={() => {
               onSave();
-              newNotify("Nueva nota agregada");
+
               onCloseModal();
             }}
           >
